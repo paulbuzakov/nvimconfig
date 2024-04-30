@@ -28,3 +28,8 @@ keymaps.set("n", "<c-w><left>", "<c-w><")
 keymaps.set("n", "<c-w><right>", "<c-w>>")
 keymaps.set("n", "<c-w><up>", "<c-w>+")
 keymaps.set("n", "<c-w><down>", "<c-w>-")
+
+-- Diagnostics
+keymaps.set("n", "<c-j>", function()
+  vim.diagnostic.goto_next()
+end, opts)
