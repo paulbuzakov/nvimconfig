@@ -12,3 +12,19 @@ keymaps.set("n", "<s-tab>", ":tabprev<Return>", opts)
 
 -- Select all
 keymaps.set("n", "<C-a>", "ggVG")
+
+-- Split windows
+keymaps.set("n", "ss", ":split<Return>", opts)
+keymaps.set("n", "sv", ":vsplit<Return>", opts)
+
+-- Move window
+keymaps.set("n", "sh", "<c-w>h")
+keymaps.set("n", "sj", "<c-w>j")
+keymaps.set("n", "sk", "<c-w>k")
+keymaps.set("n", "sl", "<c-w>l")
+
+-- Resize window
+keymaps.set("n", "<c-w><left>", "<c-w><")
+keymaps.set("n", "<c-w><right>", "<c-w>>")
+keymaps.set("n", "<c-w><up>", "<c-w>+")
+keymaps.set("n", "<c-w><down>", "<c-w>-")
