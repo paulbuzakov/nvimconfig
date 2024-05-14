@@ -1,6 +1,8 @@
 ## Base keymaps
 ```
 gcc - Comment/Uncomment
+n - Next searched word
+N - Previous searched word
 ```
 ```
 ss - Split current window
