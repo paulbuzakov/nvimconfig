@@ -17,7 +17,7 @@ function M.setup()
   map('n', '<C-l>', '<C-w>l', opts)
 
   -- Create new, Go to the Next and Go to the Prev
-  map('n', 'te', ':tabedit', opts)
+  map('n', 'te', ':tabedit<CR>', opts)
   map('n', '<Tab>', ":tabnext<CR>", opts)
   map('n', '<S-Tab>', ":tabprevious<CR>", opts)
 
