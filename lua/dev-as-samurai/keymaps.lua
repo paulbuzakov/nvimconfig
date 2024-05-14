@@ -1,4 +1,4 @@
-local M = { }
+local M = {}
 
 function M.setup()
   local vim = vim
@@ -25,10 +25,10 @@ function M.setup()
   map('n', '<S-Tab>', ":tabprevious<CR>", opts)
 
   --  Open/Close terminal modal
-  map('n', '<A-d>', '<cmd>Lspsaga term_toggle')
+  map('n', 'tt', ':ToggleTerm<CR>')
 
   -- Open/Close solution explorer
-  map('n', '<Leader>e', ':NvimTreeToggle<CR>', opts)
+  map('n', '<C-e>', ':NvimTreeToggle<CR>', opts)
 
   --Telescope keymaps
   local builtin = require('telescope.builtin')

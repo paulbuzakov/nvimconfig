@@ -1,7 +1,10 @@
-local M = { }
+local M = {}
 
 function M.setup()
   local vim = vim
+
+  require("neodev").setup({})
+  require("neoconf").setup({})
 
   vim.g.loaded_netrw = 1
   vim.g.loaded_netrwPlugin = 1
@@ -47,7 +50,7 @@ function M.setup()
   vim.cmd.colorscheme("tokyonight-moon")
 
 
-  require("gitsigns").setup( {
+  require("gitsigns").setup({
     current_line_blame = true
   })
 
@@ -68,13 +71,18 @@ function M.setup()
     }
   })
 
+  require("flash").setup({})
 
   require("notify").setup({
     render = "wrapped-compact",
     stages = "slide",
   })
-
   vim.notify = require("notify")
+
+
+  require("toggleterm").setup({
+    direction = 'float',
+  })
 
 
   require("nvim-treesitter.configs").setup({
@@ -95,13 +103,37 @@ function M.setup()
 
   require("trouble").setup()
 
+  require("bufferline").setup {
+    options = {
+      mode = 'buffers',
+      offsets = {
+        {
+          filetype = "NvimTree",
+          text = "File Explorer",
+          highlight = "Directory",
+          separator = true,
+        }
+      },
+    },
+  }
+  require('lualine').setup()
 
   require("telescope").setup()
 
+  local has_words_before = function()
+    unpack = unpack or table.unpack
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  end
 
-  local cmp = require'cmp'
+  local feedkey = function(key, mode)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+  end
+
+  local cmp = require('cmp')
   cmp.setup({
     snippet = {
+      -- REQUIRED - you must specify a snippet engine
       expand = function(args)
         vim.fn["vsnip#anonymous"](args.body)
       end,
@@ -113,18 +145,40 @@ function M.setup()
     mapping = cmp.mapping.preset.insert({
       ['<C-b>'] = cmp.mapping.scroll_docs(-4),
       ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-s>'] = cmp.mapping.complete(),
+      ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),   -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      -- Super-Tab like mappings
+      -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#vim-vsnip
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif vim.fn["vsnip#available"](1) == 1 then
+          feedkey("<Plug>(vsnip-expand-or-jump)", "")
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback()       -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        end
+      end, { "i", "s" }),
+
+      ["<S-Tab>"] = cmp.mapping(function()
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+          feedkey("<Plug>(vsnip-jump-prev)", "")
+        end
+      end, { "i", "s" }),
+
     }),
     sources = cmp.config.sources({
+      { name = 'vsnip' },   -- For ultisnips users.
       { name = 'nvim_lsp' },
-      { name = 'vsnip' },
     }, {
       { name = 'buffer' },
     })
   })
-
+  --
   -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline({ '/', '?' }, {
     mapping = cmp.mapping.preset.cmdline(),
@@ -132,7 +186,7 @@ function M.setup()
       { name = 'buffer' }
     }
   })
-
+  --
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
     mapping = cmp.mapping.preset.cmdline(),
@@ -140,18 +194,8 @@ function M.setup()
       { name = 'path' }
     }, {
       { name = 'cmdline' }
-    }),
-    matching = { disallow_symbol_nonprefix_matching = false }
+    })
   })
-
-  -- Set up lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  require('lspconfig').lua_ls.setup {
-    capabilities = capabilities
-  }
-
 end
 
 return M

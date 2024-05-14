@@ -19,9 +19,12 @@ te - Create new tab
 Tab - Switch to the next tab
 Shift + Tab - Switch to the previous tab
 ```
+```
+tt - Open terminal
+```
 ## Neotree keymaps
 ```
-<Leader>e - Open/Close solution explorer
+Ctrl + e - Open/Close solution explorer
 ```
 ## Telescope keymaps
 ```

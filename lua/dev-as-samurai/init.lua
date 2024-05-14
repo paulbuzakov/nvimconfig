@@ -9,6 +9,7 @@ function M.init()
 
   require('dev-as-samurai.autocmd').setup()
   require('dev-as-samurai.keymaps').setup()
+  require('dev-as-samurai.lspKeymaps').setup()
 end
 
 return M
