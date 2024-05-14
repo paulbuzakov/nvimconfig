@@ -6,6 +6,9 @@ function M.setup()
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
 
+  -- Deselect search words
+  map('n', '<Esc>', ':nohlsearch<CR>')
+
   -- Split current window
   map('n', 'ss', ':split<CR>', opts)
   map('n', 'sv', ':vsplit<CR>', opts)
