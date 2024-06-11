@@ -2,16 +2,34 @@ local M = {}
 
 function M.setup()
   local vim = vim
-
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
 
+  vim.o.timeout = true
+  vim.o.timeoutlen = 300
+
+  local wk = require("which-key")
+  wk.setup()
+
+  --Telescope keymaps
+  local builtin = require('telescope.builtin')
+  wk.register({
+    f = {
+      name = "file",
+      f = { function() builtin.find_files() end, "Find File" },
+      r = { function() builtin.oldfiles() end, "Open Recent File" },
+      g = { function() builtin.live_grep() end, "Live Grep" },
+      b = { function() builtin.buffers() end, "Buffers" }
+    },
+    s = {
+      name = "Split window",
+      s = { ":split<CR>", "Split window" },
+      v = { ":vsplit<CR>", "Vertical split window" },
+    }
+  }, { prefix = "<leader>" })
+
   -- Deselect search words
   map('n', '<Esc>', ':nohlsearch<CR>')
-
-  -- Split current window
-  map('n', 'ss', ':split<CR>', opts)
-  map('n', 'sv', ':vsplit<CR>', opts)
 
   -- Change current window
   map('n', '<C-h>', '<C-w>h', opts)
@@ -25,17 +43,10 @@ function M.setup()
   map('n', '<S-Tab>', ":tabprevious<CR>", opts)
 
   --  Open/Close terminal modal
-  map('n', 'tt', ':ToggleTerm<CR>')
+  map('n', 'tt', ':Lspsaga term_toggle<CR>')
 
   -- Open/Close solution explorer
   map('n', '<C-e>', ':NvimTreeToggle<CR>', opts)
-
-  --Telescope keymaps
-  local builtin = require('telescope.builtin')
-  map('n', 'ff', builtin.find_files)
-  map('n', 'fg', builtin.live_grep)
-  map('n', 'fb', builtin.buffers)
-  map('n', 'fh', builtin.help_tags)
 end
 
 return M
