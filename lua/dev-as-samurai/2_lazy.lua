@@ -10,11 +10,6 @@ function M.setup()
   end
 
   vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
-
-  require("lazy").setup("dev-as-samurai.plugins")
-
-  require("dev-as-samurai.setupPlugins").setup()
-  require("dev-as-samurai.setupLspPlugins").setup()
 end
 
 return M
