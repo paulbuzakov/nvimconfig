@@ -1,1 +1,1 @@
-require("dev-as-samurai")
+require("dev-as-samurai.0_init").init()
