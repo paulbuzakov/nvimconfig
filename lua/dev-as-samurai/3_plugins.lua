@@ -43,6 +43,7 @@ function M.setup()
       { 'nvim-lualine/lualine.nvim' },
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-telescope/telescope.nvim' },
+      { 'nvim-telescope/telescope-ui-select.nvim' },
       { 'folke/trouble.nvim' },
       { 'neovim/nvim-lspconfig' },
       { 'hrsh7th/cmp-buffer' },
@@ -54,9 +55,10 @@ function M.setup()
       { 'williamboman/mason.nvim' },
       { 'williamboman/mason-lspconfig.nvim' },
       { 'neovim/nvim-lspconfig' },
+      { 'nvimtools/none-ls.nvim' },
+      { 'nvimtools/none-ls-extras.nvim' },
       { 'RishabhRD/popfix' },
       { 'hrsh7th/cmp-nvim-lsp' },
-      { 'nvimdev/lspsaga.nvim',             event = "LspAttach" },
       { 'j-hui/fidget.nvim' },
     })
 end

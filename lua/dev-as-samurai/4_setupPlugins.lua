@@ -25,13 +25,6 @@ function M.setup()
     open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
     sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
     sort_function = nil,                                               -- use a custom function for sorting files and directories in the tree
-    -- sort_function = function (a,b)
-    --       if a.type == b.type then
-    --           return a.path > b.path
-    --       else
-    --           return a.type > b.type
-    --       end
-    --   end , -- this sorts files and directories descendantly
     default_component_configs = {
       container = {
         enable_character_fade = true
@@ -154,12 +147,6 @@ function M.setup()
         ["x"] = "cut_to_clipboard",
         ["p"] = "paste_from_clipboard",
         ["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
-        -- ["c"] = {
-        --  "copy",
-        --  config = {
-        --    show_path = "none" -- "none", "relative", "absolute"
-        --  }
-        --}
         ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
         ["q"] = "close_window",
         ["R"] = "refresh",
@@ -177,21 +164,19 @@ function M.setup()
         hide_gitignored = true,
         hide_hidden = true, -- only works on Windows for hidden files/directories
         hide_by_name = {
-          --"node_modules"
+          "node_modules"
         },
         hide_by_pattern = { -- uses glob style patterns
-          --"*.meta",
-          --"*/src/*/tsconfig.json",
         },
-        always_show = { -- remains visible even if other settings would normally hide it
-          --".gitignored",
+        always_show = {     -- remains visible even if other settings would normally hide it
+          ".gitignored",
         },
         always_show_by_pattern = { -- uses glob style patterns
-          --".env*",
+          ".env*",
         },
         never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
-          --".DS_Store",
-          --"thumbs.db"
+          ".DS_Store",
+          "thumbs.db"
         },
         never_show_by_pattern = { -- uses glob style patterns
           --".null-ls_*",
@@ -345,19 +330,22 @@ function M.setup()
   vim.notify = require("notify")
 
 
-  require("nvim-treesitter.configs").setup({
-    ensure_installed = {
-      "lua", "vim", "vimdoc",
-      "c_sharp",
-      "html", "css", "scss", "styled", "javascript", "tsx", "typescript",
-      "json", "json5", "xml",
-      "markdown", "markdown_inline",
-      "git_rebase", "gitcommit", "gitignore",
-      "sql"
-    },
+  require('nvim-treesitter.configs').setup({
+    ensure_installed = { "json", "lua", "css", "scss", "typescript", "html", "tsx" },
     sync_install = true,
-    highlight = { enable = true },
-    indent = { enable = true },
+    auto_install = true,
+    ignore_install = { "javascript" },
+    highlight = {
+      enable = true,
+      disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+          return true
+        end
+      end,
+      additional_vim_regex_highlighting = false,
+    },
   })
 
 
@@ -379,7 +367,32 @@ function M.setup()
   }
   require('lualine').setup()
 
-  require("telescope").setup()
+  require("telescope").setup({
+    extensions = {
+      ["ui-select"] = {
+        require("telescope.themes").get_dropdown {
+        }
+
+        -- pseudo code / specification for writing custom displays, like the one
+        -- for "codeactions"
+        -- specific_opts = {
+        --   [kind] = {
+        --     make_indexed = function(items) -> indexed_items, width,
+        --     make_displayer = function(widths) -> displayer
+        --     make_display = function(displayer) -> function(e)
+        --     make_ordinal = function(e) -> string
+        --   },
+        --   -- for example to disable the custom builtin "codeactions" display
+        --      do the following
+        --   codeactions = false,
+        -- }
+      }
+    }
+  })
+
+  -- To get ui-select loaded and working with telescope, you need to call
+  -- load_extension, somewhere after setup function:
+  require("telescope").load_extension("ui-select")
 
   local has_words_before = function()
     unpack = unpack or table.unpack

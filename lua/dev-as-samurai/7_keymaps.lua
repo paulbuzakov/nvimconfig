@@ -41,12 +41,6 @@ function M.setup()
   map('n', 'te', ':tabedit<CR>', opts)
   map('n', '<Tab>', ":tabnext<CR>", opts)
   map('n', '<S-Tab>', ":tabprevious<CR>", opts)
-
-  --  Open/Close terminal modal
-  map('n', 'tt', ':Lspsaga term_toggle<CR>')
-
-  -- Open/Close solution explorer
-  map('n', '<C-e>', ':NvimTreeToggle<CR>', opts)
 end
 
 return M
