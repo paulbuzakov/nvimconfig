@@ -1,7 +1,8 @@
 local M = {}
 
 function M.setup()
-  local opts = {
+  require("mason").setup()
+  require('mason-lspconfig').setup({
     ui = {
       icons = {
         package_installed = "✓",
@@ -10,45 +11,48 @@ function M.setup()
       }
     },
     ensure_installed = {
-      "stylua",
-      "prettierd",
-      "eslint_d",
-      "csharpier",
-      "lua-language-server",
-      "powershell-editor-services",
-      "omnisharp",
-      "csharp-language-server",
-      "netcoredbg",
-      "typescript-language-server",
-      "cspell",
-    }
-  }
-  require("mason").setup(opts)
+      "eslint",
+      "tsserver",
+      "tailwindcss",
+      "lua_ls",
+    },
+    automatic_installation = true,
+  })
 
-  local mr = require("mason-registry")
-  local function ensure_installed()
-    for _, tool in ipairs(opts.ensure_installed) do
-      local p = mr.get_package(tool)
-      if not p:is_installed() then
-        p:install()
-      end
-    end
-  end
+  local lspconfig = require('lspconfig')
 
-  if mr.refresh then
-    mr.refresh(ensure_installed)
-  else
-    ensure_installed()
-  end
+  lspconfig.eslint.setup {}
+  lspconfig.tsserver.setup {}
+  lspconfig.tailwindcss.setup {}
+  lspconfig.lua_ls.setup {}
 
-  require('mason-lspconfig').setup()
-  require("mason-lspconfig").setup_handlers {
-    function(server_name)
-      require("lspconfig")[server_name].setup {}
-    end,
-  }
+  local null_ls = require("null-ls")
 
-  require("lspsaga").setup({})
+  -- code action sources
+  local code_actions = null_ls.builtins.code_actions
+
+  -- diagnostic sources
+  local diagnostics = null_ls.builtins.diagnostics
+
+  -- formatting sources
+  local formatting = null_ls.builtins.formatting
+
+  -- hover sources
+  local hover = null_ls.builtins.hover
+
+  -- completion sources
+  local completion = null_ls.builtins.completion
+
+  null_ls.setup({
+    sources = {
+      formatting.prettier,
+      require("none-ls.code_actions.eslint"),
+      require("none-ls.diagnostics.eslint"),
+      formatting.stylua,
+      hover.dictionary,
+      completion.vsnip
+    },
+  })
 end
 
 return M
