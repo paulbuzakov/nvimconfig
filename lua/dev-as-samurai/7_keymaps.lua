@@ -29,8 +29,7 @@ function M.setup()
   }, { prefix = "<leader>" })
 
   -- Save and Save All
-  map('n', '<C-s>', ':w<CR>', opts)
-  map('n', '<C-S>', ':wa<CR>', opts)
+  map('n', '<C-s>', ':wa<CR>', opts)
 
   -- Deselect search words
   map('n', '<Esc>', ':nohlsearch<CR>')
