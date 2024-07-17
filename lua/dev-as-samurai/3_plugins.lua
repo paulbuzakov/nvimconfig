@@ -58,6 +58,7 @@ function M.setup()
 		{ "RishabhRD/popfix" },
 		{ "hrsh7th/cmp-nvim-lsp" },
 		{ "j-hui/fidget.nvim" },
+		{ "Pocco81/auto-save.nvim" },
 	})
 end
 
