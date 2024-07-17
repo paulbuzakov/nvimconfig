@@ -43,16 +43,22 @@ function M.setup()
 	-- completion sources
 	local completion = null_ls.builtins.completion
 
-	local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-
 	null_ls.setup({
 		sources = {
+			formatting.stylua,
 			formatting.prettier,
 			require("none-ls.code_actions.eslint"),
 			require("none-ls.diagnostics.eslint"),
-			formatting.stylua,
 			hover.dictionary,
 			completion.vsnip,
+		},
+	})
+
+	require("auto-save").setup({
+		callbacks = {
+			before_asserting_save = function()
+				vim.lsp.buf.format({})
+			end,
 		},
 	})
 end

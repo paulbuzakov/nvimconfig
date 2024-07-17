@@ -462,8 +462,6 @@ function M.setup()
 			{ name = "cmdline" },
 		}),
 	})
-
-	require("auto-save").setup()
 end
 
 return M
