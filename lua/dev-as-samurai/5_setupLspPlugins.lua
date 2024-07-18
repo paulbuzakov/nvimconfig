@@ -39,7 +39,15 @@ function M.setup()
     },
   })
 
-  require("auto-save").setup({})
+  require("auto-save").setup({
+    debounce_delay = 1000,
+    callbacks = {
+      before_saving = function()
+        print("format")
+        vim.lsp.buf.format({})
+      end,
+    },
+  })
 end
 
 return M

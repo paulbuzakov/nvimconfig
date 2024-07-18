@@ -49,7 +49,7 @@ function M.setup()
     { "RishabhRD/popfix" },
     { "hrsh7th/cmp-nvim-lsp" },
     { "j-hui/fidget.nvim" },
-    { "singlexyz/auto-save.nvim" },
+    { "paulbuzakov/auto-save.nvim" },
   })
 end
 

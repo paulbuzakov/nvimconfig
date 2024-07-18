@@ -12,14 +12,14 @@ function M.setup()
   local builtin = require("telescope.builtin")
 
   -- Work with files and buffers
-  map('n', 'fb',  builtin.buffers, opts)
-  map('n', 'ff',  builtin.find_files, opts)
-  map('n', 'fg',  builtin.live_grep, opts)
-  map('n', 'fr',  builtin.oldfiles, opts)
+  map("n", "fb", builtin.buffers, opts)
+  map("n", "ff", builtin.find_files, opts)
+  map("n", "fg", builtin.live_grep, opts)
+  map("n", "fr", builtin.oldfiles, opts)
 
   -- Split pane
-  map('n', 'ss', ':split<CR>', opts)
-  map('n', 'sv', ':vsplit<CR>', opts)
+  map("n", "ss", ":split<CR>", opts)
+  map("n", "sv", ":vsplit<CR>", opts)
 
   -- Deselect search words
   map("n", "<Esc>", ":nohlsearch<CR>")
