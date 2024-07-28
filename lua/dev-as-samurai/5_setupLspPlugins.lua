@@ -1,53 +1,57 @@
 local M = {}
 
 function M.setup()
-  require("mason").setup()
-  require("mason-lspconfig").setup({
-    ui = {
-      icons = {
-        package_installed = "✓",
-        package_pending = "➜",
-        package_uninstalled = "✗",
-      },
-    },
-    ensure_installed = {
-      "eslint",
-      "tsserver",
-      "tailwindcss",
-      "lua_ls",
-    },
-    automatic_installation = true,
-  })
+	require("mason").setup()
+	require("mason-lspconfig").setup({
 
-  local lspconfig = require("lspconfig")
+		ui = {
+			icons = {
+				package_installed = "✓",
+				package_pending = "➜",
+				package_uninstalled = "✗",
+			},
+		},
+		ensure_installed = {
+			"eslint",
+			"tsserver",
+			"tailwindcss",
+			"lua_ls",
+			"csharp_ls",
+		},
+		automatic_installation = true,
+	})
 
-  lspconfig.eslint.setup({})
-  lspconfig.tsserver.setup({})
-  lspconfig.tailwindcss.setup({})
-  lspconfig.lua_ls.setup({})
+	local lspconfig = require("lspconfig")
 
-  local null_ls = require("null-ls")
+	lspconfig.eslint.setup({})
+	lspconfig.tsserver.setup({})
+	lspconfig.tailwindcss.setup({})
+	lspconfig.lua_ls.setup({})
+	lspconfig.csharp_ls.setup({})
 
-  null_ls.setup({
-    sources = {
-      null_ls.builtins.formatting.prettierd,
-      null_ls.builtins.completion.vsnip,
-      null_ls.builtins.code_actions.refactoring,
-      require("none-ls.diagnostics.eslint_d"),
-      require("none-ls.code_actions.eslint_d"),
-      null_ls.builtins.formatting.stylua,
-    },
-  })
+	local null_ls = require("null-ls")
 
-  require("auto-save").setup({
-    debounce_delay = 1000,
-    callbacks = {
-      before_saving = function()
-        print("format")
-        vim.lsp.buf.format({})
-      end,
-    },
-  })
+	null_ls.setup({
+		sources = {
+			null_ls.builtins.formatting.prettierd,
+			null_ls.builtins.completion.vsnip,
+			null_ls.builtins.code_actions.refactoring,
+			require("none-ls.diagnostics.eslint_d"),
+			require("none-ls.code_actions.eslint_d"),
+			null_ls.builtins.formatting.stylua,
+			null_ls.builtins.formatting.csharpier,
+		},
+	})
+
+	require("auto-save").setup({
+		debounce_delay = 1000,
+		callbacks = {
+			before_saving = function()
+				print("format")
+				vim.lsp.buf.format({})
+			end,
+		},
+	})
 end
 
 return M
