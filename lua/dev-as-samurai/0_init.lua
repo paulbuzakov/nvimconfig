@@ -18,6 +18,9 @@ function M.init()
 	-- Setup keymaps
 	require("dev-as-samurai.7_keymaps").setup()
 	require("dev-as-samurai.8_lspKeymaps").setup()
+
+	-- Setup Debugging
+	require("dev-as-samurai.9_debugging").setup()
 end
 
 return M

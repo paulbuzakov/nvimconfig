@@ -8,7 +8,11 @@ function M.setup()
 		{ "nvim-lua/plenary.nvim" },
 		{ "MunifTanjim/nui.nvim" },
 		{ "nvim-neo-tree/neo-tree.nvim" },
-		{ "craftzdog/solarized-osaka.nvim" },
+		{
+			"catppuccin/nvim",
+			name = "catppuccin",
+			priority = 1000,
+		},
 		{ "lewis6991/gitsigns.nvim" },
 		{ "echasnovski/mini.nvim" },
 		{ "echasnovski/mini.starter" },
@@ -51,6 +55,25 @@ function M.setup()
 		{ "hrsh7th/cmp-nvim-lsp" },
 		{ "j-hui/fidget.nvim" },
 		{ "paulbuzakov/auto-save.nvim" },
+
+		-- 9_debuggings.lua
+		{ "mfussenegger/nvim-dap" },
+		{ "rcarriga/nvim-dap-ui" },
+		{ "nvim-neotest/nvim-nio" },
+
+		{ -- The task runner we use
+			"stevearc/overseer.nvim",
+			commit = "6271cab7ccc4ca840faa93f54440ffae3a3918bd",
+			cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+			opts = {
+				task_list = {
+					direction = "bottom",
+					min_height = 25,
+					max_height = 25,
+					default_detail = 1,
+				},
+			},
+		},
 	})
 end
 
