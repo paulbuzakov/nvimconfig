@@ -12,7 +12,7 @@ function M.setup()
     },
     ensure_installed = {
       "eslint",
-      "tsserver",
+      "ts_ls",
       "tailwindcss",
       "lua_ls",
       "csharp_ls",
@@ -23,7 +23,7 @@ function M.setup()
   local lspconfig = require("lspconfig")
 
   lspconfig.eslint.setup({})
-  lspconfig.tsserver.setup({})
+  lspconfig.ts_ls.setup({})
   lspconfig.tailwindcss.setup({})
   lspconfig.lua_ls.setup({})
   lspconfig.csharp_ls.setup({})
