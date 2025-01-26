@@ -82,15 +82,15 @@ function M.setup()
             config = function()
                 require("parrot").setup({
                     providers = {
-                        -- anthropic = {
-                        --     api_key = os.getenv("ANTHROPIC_API_KEY"),
-                        -- },
+                        anthropic = {
+                            api_key = os.getenv("ANTHROPIC_API_KEY"),
+                        },
                         openai = {
                             api_key = os.getenv("OPENAI_API_KEY"),
                         },
-                        -- github = {
-                        --     api_key = os.getenv("GITHUB_TOKEN"),
-                        -- },
+                        github = {
+                            api_key = os.getenv("GITHUB_TOKEN"),
+                        },
                     },
                 })
             end,
