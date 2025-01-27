@@ -3,19 +3,10 @@ local M = {}
 function M.setup()
     local vim = vim
 
-    require("neodev").setup({
-        library = {
-            plugins = { "nvim-dap-ui" },
-            types = true,
-        },
-    })
-
-    require("neoconf").setup({})
-
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-
     vim.opt.termguicolors = true
+
+    require("neodev").setup({})
+    require("neoconf").setup({})
 
     -- If you want icons for diagnostic errors, you'll need to define them somewhere:
     vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
@@ -25,9 +16,6 @@ function M.setup()
 
     require("neo-tree").setup({})
     vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
-
-    -- -- require("solarized-osaka").setup({})
-    -- vim.cmd.colorscheme("solarized-osaka")
 
     require("catppuccin").setup({
         background = { -- :h background
