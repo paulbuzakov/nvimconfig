@@ -6,4 +6,6 @@ debug
 foo.*
 *.log
 data
-lazy-lock.json
+
+# MacOS's specific files.
+**/.DS_Store
