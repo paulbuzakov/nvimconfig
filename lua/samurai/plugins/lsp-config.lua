@@ -5,9 +5,6 @@ return {
 		"mason-org/mason-lspconfig.nvim",
 	},
 	config = function()
-        -- vim.lsp.set_log_level("debug")
-
-		-- Virtual text and other diagnostics settings
 		vim.diagnostic.config({
 			virtual_text = false,
 			virtual_lines = false,
@@ -24,10 +21,6 @@ return {
 			severity_sort = true,
 		})
 
-		vim.lsp.enable("lua_ls")
-		-- vim.lsp.enable("csharp_ls")
-		vim.lsp.enable("omnisharp")
-		vim.lsp.enable("clangd")
 
 		vim.lsp.config("lua_ls", {
 			settings = {
@@ -38,25 +31,6 @@ return {
 			},
 		})
 
-		vim.lsp.config("clangd", {
-			cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu" },
-			filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-			root_dir = function(fname)
-				return require("lspconfig.util").root_pattern(
-					".clangd",
-					".clang-tidy",
-					".clang-format",
-					"compile_commands.json",
-					"compile_flags.txt",
-					"configure.ac",
-					".git"
-				)(fname)
-			end,
-			init_options = {
-				usePlaceholders = true,
-				completeUnimported = true,
-				clangdFileStatus = true,
-			},
-		})
+        vim.lsp.enable("lua_ls")
 	end,
 }
