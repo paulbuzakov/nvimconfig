@@ -7,7 +7,6 @@ return {
 			typescript = { "prettier" },
 			html = { "prettier" },
 			css = { "prettier" },
-			json = { "prettier" },
 			markdown = { "prettier" },
 			cs = { "csharpier" },
 			sln = { "xmlformat" },
@@ -18,6 +17,7 @@ return {
 			cpp = { "clang-format" },
 			objc = { "clang-format" },
 			objcpp = { "clang-format" },
+			json = { "fixjson" },
 		},
 		formatters = {
 			csharpier = {
@@ -40,6 +40,14 @@ return {
 				command = "xmlformat",
 				args = {
 					"-",
+				},
+				stdin = true,
+			},
+			["clang-format"] = {
+				command = "clang-format",
+				args = {
+					"-style",
+					"Google", -- You can change this to your preferred style
 				},
 				stdin = true,
 			},

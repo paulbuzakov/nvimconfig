@@ -20,8 +20,6 @@ return {
 		opts = {
 			automatic_enable = false,
 			ensure_installed = {
-				"omnisharp",
-				"csharp_ls",
 				"lua_ls",
 				"clangd",
 			},
@@ -38,9 +36,11 @@ return {
 				"prettier",
 				"xmlformatter",
 				"stylua",
-				"netcoredbg",
+				-- "netcoredbg",
+				"roslyn",
 				"clang-format",
 				"codelldb",
+				"fixjson",
 			},
 		},
 	},

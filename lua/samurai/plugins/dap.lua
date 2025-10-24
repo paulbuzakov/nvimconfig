@@ -1,21 +1,66 @@
 return {
 	{
 		"mfussenegger/nvim-dap",
+		dependencies = {
+			"williamboman/mason.nvim",
+			"rcarriga/nvim-dap-ui",
+		},
+		event = "VeryLazy",
+		config = function()
+			local dap = require("dap")
+
+			local cpp = require("samurai.utils.cpp")
+			dap.adapters.codelldb = cpp.get_dap_adapter({
+				local_path = nil,
+				mason_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+			})
+			dap.configurations.cpp = cpp.get_dap_configurations()
+
+			local dotnet = require("samurai.utils.dotnet")
+			local netcoredbg = dotnet.get_dap_adapter({
+				local_path = "/usr/local/netcoredbg",
+				mason_path = vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg",
+			})
+
+			dap.adapters.netcoredbg = netcoredbg
+			dap.adapters.coreclr = netcoredbg
+			dap.configurations.cs = dotnet.get_dap_configurations()
+		end,
 	},
 	{
 		"rcarriga/nvim-dap-ui",
 		dependencies = {
+			"williamboman/mason.nvim",
 			"mfussenegger/nvim-dap",
+			"theHamsta/nvim-dap-virtual-text",
 			"nvim-neotest/nvim-nio",
 		},
-		config = function()
+		opts = {
+			ui = {},
+			virtual_text_opts = {
+				enabled = true,
+				enabled_commands = true,
+				highlight_changed_variables = true,
+				highlight_new_as_changed = true,
+				show_stop_reason = true,
+				commented = false,
+				only_first_definition = true,
+				all_references = false,
+				filter_references_pattern = "<module",
+			},
+		},
+		config = function(_, opts)
 			local dap = require("dap")
 			local dapui = require("dapui")
+			local dap_virtual_text = require("nvim-dap-virtual-text")
 
-			vim.fn.setenv("DAP_LOG", "true")
-			dap.set_log_level("TRACE")
+			dapui.setup(opts.ui)
+			dap_virtual_text.setup(opts.virtual_text_opts)
 
-			dapui.setup()
+			vim.fn.sign_define("DapBreakpoint", { text = " ", texthl = "", linehl = "", numhl = "" })
+			vim.fn.sign_define("DapBreakpointCondition", { text = " ", texthl = "", linehl = "", numhl = "" })
+			vim.fn.sign_define("DapBreakpointRejected", { text = " ", texthl = "", linehl = "", numhl = "" })
+			vim.fn.sign_define("DapStopped", { text = "󰳟 ", texthl = "", linehl = "", numhl = "" })
 
 			dap.listeners.before.attach.dapui_config = function()
 				dapui.open()
@@ -29,88 +74,44 @@ return {
 			dap.listeners.before.event_exited.dapui_config = function()
 				dapui.close()
 			end
+		end,
+	},
+	{
+		"nvim-neotest/neotest",
+		commit = "52fca6717ef972113ddd6ca223e30ad0abb2800c",
+		dependencies = {
+			"Issafalcon/neotest-dotnet",
+			"nvim-neotest/nvim-nio",
+			"nvim-lua/plenary.nvim",
+			"antoinemadec/FixCursorHold.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			local neotest = require("neotest")
+			local dotnet = require("neotest-dotnet")
 
-			-- local mason_path = vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg"
-			local explicit_path = "/Users/paulbu/Documents/net_debugger/netcoredbg"
-			local netcoredbg_adapter = {
-				type = "executable",
-				command = explicit_path,
-				args = { "--interpreter=vscode" },
-			}
-
-			dap.adapters.netcoredbg = netcoredbg_adapter
-			dap.adapters.coreclr = netcoredbg_adapter
-
-			-- CodeLLDB adapter for C/C++
-			dap.adapters.codelldb = {
-				type = "server",
-				port = "${port}",
-				executable = {
-					command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
-					args = { "--port", "${port}" },
+			neotest.setup({
+				status = {
+					virtual_text = true,
 				},
-			}
-
-			local dotnet = require("samurai.utils.dotnet")
-
-			dap.configurations.cs = {
-				{
-					type = "coreclr",
-					name = "launch - netcoredbg",
-					request = "launch",
-					program = function()
-						return dotnet.build_dll_path()
-					end,
+				adapters = {
+					dotnet({
+						dap = {
+							args = { justMyCode = false },
+							adapter_name = "netcoredbg",
+						},
+						custom_attributes = {
+							xunit = { "MyCustomFactAttribute" },
+							nunit = { "MyCustomTestAttribute" },
+							mstest = { "MyCustomTestMethodAttribute" },
+						},
+						dotnet_additional_args = {
+							"--verbosity detailed",
+						},
+						discovery_root = "project",
+					}),
 				},
-				{
-					type = "coreclr",
-					name = "Debug Tests (Select Project)",
-					request = "launch",
-					program = "dotnet",
-					args = function()
-						local csproj = dotnet.build_and_get_test_project()
-						return { "test", csproj, "--no-build" }
-					end,
-					cwd = function()
-						local csproj = vim.g.dotnet_selected_test_csproj
-						if csproj then return vim.fn.fnamemodify(csproj, ':p:h') end
-						return vim.loop.cwd()
-					end,
-					console = "integratedTerminal",
-				},
-				{
-					type = "coreclr",
-					name = "Attach to Process (Pick)",
-					request = "attach",
-					processId = function()
-						return require('dap.utils').pick_process()
-					end,
-				},
-			}
-
-			-- C/C++ configurations
-			dap.configurations.c = {
-				{
-					name = "Launch (C)",
-					type = "codelldb",
-					request = "launch",
-					program = function()
-						return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-					end,
-					cwd = '${workspaceFolder}',
-					stopOnEntry = false,
-					args = {},
-				},
-				{
-					name = "Attach to process (C)",
-					type = "codelldb",
-					request = "attach",
-					pid = require('dap.utils').pick_process,
-					args = {},
-				},
-			}
-
-			dap.configurations.cpp = dap.configurations.c
+			})
 		end,
 	},
 }

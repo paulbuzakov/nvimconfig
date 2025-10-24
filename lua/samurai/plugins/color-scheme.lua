@@ -1,94 +1,104 @@
 return {
 	{
-		"olivercederborg/poimandres.nvim",
-		lazy = false,
-		enabled = false,
-		priority = 1000,
+		"vague2k/vague.nvim",
+		lazy = false, -- make sure we load this during startup if it is your main colorscheme
+		priority = 1000, -- make sure to load this before all the other plugins
 		config = function()
-			require("poimandres").setup({
-				disable_italics = true,
-			})
-		end,
-		init = function()
-			vim.cmd("colorscheme poimandres")
-		end,
-	},
-	{
-		"catppuccin/nvim",
-		lazy = false,
-		enabled = false,
-		priority = 1000,
-		config = function()
-			require("catppuccin").setup({
-				flavour = "mocha",
-				transparent_background = true,
-				no_italic = true,
-			})
+			-- NOTE: you do not need to call setup if you don't want to.
+			require("vague").setup({
+				transparent = true, -- don't set background
+				-- disable bold/italic globally in `style`
+				bold = false,
+				italic = false,
+				style = {
+					-- "none" is the same thing as default. But "italic" and "bold" are also valid options
+					boolean = "bold",
+					number = "none",
+					float = "none",
+					error = "bold",
+					comments = "italic",
+					conditionals = "none",
+					functions = "none",
+					headings = "bold",
+					operators = "none",
+					strings = "italic",
+					variables = "none",
 
-			vim.cmd("colorscheme catppuccin")
-		end,
-	},
-	{
-		"folke/tokyonight.nvim",
-		lazy = false,
-		enabled = false,
-		priority = 1000,
-		config = function()
-			require("tokyonight").setup({
-				style = "storm",
-				transparent = true,
-				terminal_colors = true,
-				styles = {
-					comments = { italic = false },
-					keywords = { italic = false },
-					functions = { italic = false },
-					variables = { italic = false },
+					-- keywords
+					keywords = "none",
+					keyword_return = "italic",
+					keywords_loop = "none",
+					keywords_label = "none",
+					keywords_exception = "none",
+
+					-- builtin
+					builtin_constants = "bold",
+					builtin_functions = "none",
+					builtin_types = "bold",
+					builtin_variables = "none",
+				},
+				-- plugin styles where applicable
+				-- make an issue/pr if you'd like to see more styling options!
+				plugins = {
+					cmp = {
+						match = "bold",
+						match_fuzzy = "bold",
+					},
+					dashboard = {
+						footer = "italic",
+					},
+					lsp = {
+						diagnostic_error = "bold",
+						diagnostic_hint = "none",
+						diagnostic_info = "italic",
+						diagnostic_ok = "none",
+						diagnostic_warn = "bold",
+					},
+					neotest = {
+						focused = "bold",
+						adapter_name = "bold",
+					},
+					telescope = {
+						match = "bold",
+					},
+				},
+
+				-- Override highlights or add new highlights
+				on_highlights = function(highlights, colors) end,
+
+				-- Override colors
+				colors = {
+					bg = "#0d0f11",
+					inactiveBg = "#1c1c24",
+					fg = "#aeb4b8",
+					floatBorder = "#878787",
+					line = "#252530",
+					comment = "#606079",
+					builtin = "#b4d4cf",
+					func = "#c48282",
+					string = "#e8b589",
+					number = "#e0a363",
+					property = "#c3c3d5",
+					constant = "#aeaed1",
+					parameter = "#bb9dbd",
+					visual = "#333738",
+					error = "#b35a5a",
+					warning = "#d1bb80",
+					hint = "#7e98e8",
+					operator = "#90a0b5",
+					keyword = "#6e94b2",
+					type = "#9bb4bc",
+					search = "#405065",
+					plus = "#7fa563",
+					delta = "#f3be7c",
 				},
 			})
 
-			vim.cmd("colorscheme tokyonight")
-		end,
-	},
-	{
-		"ellisonleao/gruvbox.nvim",
-		lazy = false,
-		enabled = false,
-		priority = 1000,
-		config = function()
-			require("gruvbox").setup({
-				undercurl = true,
-				underline = true,
-				bold = true,
-				italic = {
-					strings = false,
-					comments = false,
-					operators = false,
-					folds = false,
-				},
-				strikethrough = true,
-				invert_selection = false,
-				contrast = "hard",
-				overrides = {},
-				transparent_mode = true,
+			require("notify").setup({
+				background_colour = "#0d0f11",
 			})
 
-			vim.cmd("colorscheme gruvbox")
-		end,
-	},
-	{
-		"neanias/everforest-nvim",
-		version = false,
-		lazy = false,
-		enabled = true,
-		priority = 1000,
-		config = function()
-			require("everforest").setup({
-				background = "medium",
-				transparent_background_level = 0.5,
-				disable_italic_comments = true,
-			})
-
-			vim.cmd("colorscheme everforest")
+			vim.cmd("colorscheme vague")
 		end,
 	},
 }

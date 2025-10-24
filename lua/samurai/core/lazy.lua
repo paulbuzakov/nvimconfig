@@ -23,7 +23,7 @@ require("lazy").setup({
 		border = "rounded",
 	},
 	change_detection = {
-		notify = false,
+		notify = true,
 	},
 	checker = {
 		enabled = true,

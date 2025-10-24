@@ -21,7 +21,6 @@ return {
 			severity_sort = true,
 		})
 
-
 		vim.lsp.config("lua_ls", {
 			settings = {
 				Lua = {
@@ -31,6 +30,11 @@ return {
 			},
 		})
 
-        vim.lsp.enable("lua_ls")
+		vim.lsp.config("clangd", {
+			filetypes = { "c", "cpp", "objc", "objcpp" },
+		})
+
+		vim.lsp.enable("lua_ls")
+		vim.lsp.enable("clangd")
 	end,
 }
