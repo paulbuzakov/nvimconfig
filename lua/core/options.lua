@@ -92,6 +92,10 @@ opt.ttimeoutlen = 0
 -- ----------------------------
 opt.cmdheight = 1 -- Minimum space for command line
 
+vim.mapleader = " " -- Set leader key to spaces
+vim.g.mapleader = " " -- Set leader key to spaces (for plugins that check g:mapleader)
+vim.g.maplocalleader = " " -- Set local leader key to spaces
+
 -- ----------------------------
 -- Misc
 -- ----------------------------
@@ -99,8 +103,3 @@ opt.termguicolors = true -- True color support
 opt.isfname:append("@-@") -- Allow `@` in file names
 opt.backspace = { "start", "eol", "indent" } -- Better backspace behavior
 
--- ----------------------------
--- Leader key
--- ----------------------------
-g.mapleader = " " -- Set <leader> to space
-g.maplocalleader = " "
